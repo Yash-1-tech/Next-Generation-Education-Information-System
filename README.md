@@ -1,5 +1,4 @@
 # Next-Generation-Education-Information-System
----
 teacher-copilot/
 ├── index.html
 ├── package.json
