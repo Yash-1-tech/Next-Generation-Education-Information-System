@@ -5,10 +5,12 @@ import {
   Route,
   NavLink
 } from "react-router-dom";
+import type { CSSProperties } from "react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import logo from "./assets/logo.png";
+import bg from "./assets/bg.png";
 
 /* =====================
    TYPES
@@ -34,19 +36,20 @@ type TeachingBlueprint = {
    ASSETS (ONE PLACE)
 ===================== */
 const ASSETS = {
-  background:
-    "https://images.unsplash.com/photo-1523050854058-8df90110c9f1",
   subjectImages: {
     Maths:
-      "https://upload.wikimedia.org/wikipedia/commons/8/8b/Linear_function_graph.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Linear_Function_Graph.svg/500px-Linear_Function_Graph.svg.png",
     Science:
-      "https://upload.wikimedia.org/wikipedia/commons/1/19/Newton%27s_laws_of_motion.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/a/ae/Binary_system_orbit_q%3D3_e%3D0.gif",
+      //https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Free_body1.3.svg/500px-Free_body1.3.svg.png
+      //https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Bouncing_ball_strobe_edit.jpg/500px-Bouncing_ball_strobe_edit.jpg
+      //https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Skylab_and_Earth_Limb_-_GPN-2000-001055.jpg/500px-Skylab_and_Earth_Limb_-_GPN-2000-001055.jpg
     English:
-      "https://upload.wikimedia.org/wikipedia/commons/4/4c/Reading_icon.svg",
+      "https://imgs.search.brave.com/8jlqI5GbW-bq-O1FtmRU9y8bh1SvmWW40l5OP0CSpaA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/d2lsbGlhbXNoYWtl/c3BlYXJlLm5ldC9h/c3NldHMvaW1nL3No/YWtlc3BlYXJlLmpw/Zw",
     History:
-      "https://upload.wikimedia.org/wikipedia/commons/5/55/History_icon.svg",
+      "https://imgs.search.brave.com/7jZCO1zRZDF--luWUMXXT30AvFxFjKGqjCQJzlqhflM/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzgyL2E3/L2Q0LzgyYTdkNDg5/MmIwMWNhZWIwNTdj/OWFlMjRlZGYwODky/LmpwZw",
     Geography:
-      "https://upload.wikimedia.org/wikipedia/commons/3/3b/Globe_icon.svg"
+      "https://imgs.search.brave.com/_6AvCinGY2w_eq1sOUGFH41S7cSWOiyipTrTs0Au0qc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/d2VhdGhlci5nb3Yv/aW1hZ2VzL2NsaW1h/dGVzZXJ2aWNlcy9t/aXNjL2NWU3cucG5n"
   }
 };
 
@@ -97,18 +100,20 @@ function getMockBlueprint(subject: Subject): TeachingBlueprint {
 ===================== */
 const page = {
   minHeight: "100vh",
-  backgroundImage: `linear-gradient(rgba(248,250,252,0.05), rgba(248,250,252,0.05)), url('${ASSETS.background}')`,
+  backgroundImage: `linear-gradient(rgba(248,250,252,0.05), rgba(248,250,252,0.05)), url('${bg}')`,
   backgroundSize: "cover",
   backgroundPosition: "center",
   padding: "24px",
   fontFamily: "Inter, system-ui, sans-serif"
 };
 
-const layout = {
+const layout: CSSProperties = {
   display: "flex",
   gap: "24px",
   flexDirection: window.innerWidth < 768 ? "column" : "row"
 };
+
+
 
 const sidebar = {
   width: "240px",
@@ -226,6 +231,7 @@ export default function App() {
    PAGES
 ===================== */
 function Dashboard({ user }: { user: any }) {
+  
   const [subject, setSubject] = useState<Subject | null>(null);
   const [topic, setTopic] = useState<string | null>(null);
   const [blueprint, setBlueprint] = useState<TeachingBlueprint | null>(null);
@@ -256,6 +262,15 @@ function Dashboard({ user }: { user: any }) {
 
   return (
     <>
+    
+        <p style={{ maxWidth: "700px", color: "#334155" }}>
+        NEIS assists teachers by generating structured, classroom-ready lesson
+        blueprints using AI. The system anticipates student misconceptions,
+        suggests zero-cost teaching aids, and adapts explanations to local
+        languages—ensuring effective learning even in resource-constrained settings.
+        </p>
+
+
       <h3>Select Subject</h3>
       {(Object.keys(TOPICS) as Subject[]).map(s => (
         <button key={s} style={btn} onClick={() => {
@@ -316,9 +331,28 @@ function About() {
   return (
     <div style={card}>
       <p>
-        NEIS empowers teachers—especially non-specialists—by providing
-        AI-generated lesson blueprints, anticipatory remediation, and
-        low-cost teaching strategies using Google technologies.
+        The Next-Generation Education Information System (NEIS) is designed to
+        augment teacher capability in classrooms where subject specialization,
+        infrastructure, or instructional resources may be limited.
+      </p>
+
+      <p>
+        NEIS leverages Google Gemini to generate pedagogically sound, 40-minute
+        lesson blueprints that follow proven instructional structures—engagement
+        hooks, core explanation, guided activities, and assessment cues.
+      </p>
+
+      <p>
+        Unlike generic AI tools, NEIS is purpose-built for education systems.
+        It anticipates student misconceptions before they arise, provides
+        real-time remedial scripts for teachers, and recommends zero-cost
+        teaching aids using everyday materials.
+      </p>
+
+      <p>
+        The platform is backed by Firebase Authentication and Firestore,
+        enabling secure teacher identity, lesson persistence, and future
+        collaboration across schools and regions.
       </p>
     </div>
   );
@@ -327,13 +361,42 @@ function About() {
 function Features() {
   return (
     <div style={card}>
-      <ul>
-        <li>Gemini-powered AI Teaching Blueprints</li>
-        <li>Anticipatory Misconception Mapping</li>
-        <li>Multilingual Vernacular Bridge</li>
-        <li>Zero-Cost Teaching Aids</li>
-        <li>Firebase-backed persistence</li>
-      </ul>
+      <h3>Key Features</h3>
+
+      <h4>AI Teaching Blueprints</h4>
+      <p>
+        Gemini-powered, classroom-ready lesson flows that guide teachers through
+        a full 40-minute period—covering engagement hooks, concept explanation,
+        student activities, and formative assessment.
+      </p>
+
+      <h4>Anticipatory Misconception Mapping</h4>
+      <p>
+        NEIS predicts common student logic gaps before the lesson begins and
+        equips teachers with instant remedial scripts to address confusion
+        without breaking lesson flow.
+      </p>
+
+      <h4>Multilingual Vernacular Bridge</h4>
+      <p>
+        Complex textbook concepts are translated into locally relevant
+        explanations using regional languages and culturally familiar analogies,
+        improving comprehension and inclusivity.
+      </p>
+
+      <h4>Zero-Cost Teaching Aids</h4>
+      <p>
+        NEIS suggests hands-on classroom activities using materials commonly
+        available in underserved areas—such as bottle caps, stones, chalk, or
+        paper—removing dependency on expensive infrastructure.
+      </p>
+
+      <h4>Google-Powered Infrastructure</h4>
+      <p>
+        Built on Firebase Authentication and Firestore for secure access and
+        persistent lesson storage, with optional integration into Google Forms,
+        Sheets, and Meet for assessments, planning, and live instruction.
+      </p>
     </div>
   );
 }
