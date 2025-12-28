@@ -263,15 +263,26 @@ function Dashboard({ user }: { user: any }) {
   return (
     <>
     
-        <p style={{ maxWidth: "700px", color: "#334155" }}>
+      <div
+      style={{
+        background: "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(8px)",
+        borderRadius: "12px",
+        padding: "16px",
+        maxWidth: "720px",
+        color: "#0f172a",
+        marginBottom: "20px"
+      }}
+      >
+      <p style={{ margin: 0 }}>
         NEIS assists teachers by generating structured, classroom-ready lesson
         blueprints using AI. The system anticipates student misconceptions,
         suggests zero-cost teaching aids, and adapts explanations to local
         languages—ensuring effective learning even in resource-constrained settings.
-        </p>
+      </p>
+      
 
-
-      <h3>Select Subject</h3>
+      <h3 style={{color: "#020617"}}>Select Subject</h3>
       {(Object.keys(TOPICS) as Subject[]).map(s => (
         <button key={s} style={btn} onClick={() => {
           setSubject(s);
@@ -292,7 +303,7 @@ function Dashboard({ user }: { user: any }) {
           ))}
         </>
       )}
-
+      </div>
       {topic && (
         <button style={btn} onClick={generate}>
           Generate Teaching Blueprint
